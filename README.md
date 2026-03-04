@@ -1,0 +1,1 @@
+# ghostty-weekly-debian
