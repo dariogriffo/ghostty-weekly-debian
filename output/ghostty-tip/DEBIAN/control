@@ -1,0 +1,13 @@
+Source: ghostty
+Section: utils
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://ghostty.org/
+Package: ghostty-tip
+Version: GHOSTTY_VERSION-BUILD_VERSION+DIST
+Architecture: amd64
+Depends: libadwaita-1-0, libc6, libfontconfig1, libfreetype6, libglib2.0-0, libgtk-4-1, libharfbuzz0b, libonig5, libx11-6, libxml2
+Description: Nightly build of Ghostty.
+ Weekly build from the upstream main branch. Tracks the latest
+ development code and may be unstable. Install the stable `ghostty`
+ package if you want a release build.

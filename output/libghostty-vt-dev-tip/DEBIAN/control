@@ -1,0 +1,18 @@
+Source: ghostty
+Section: libdevel
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://ghostty.org/
+Package: libghostty-vt-dev-tip
+Version: GHOSTTY_VERSION-BUILD_VERSION+DIST
+Architecture: amd64
+Multi-Arch: same
+Depends: libghostty-vt0-tip (= GHOSTTY_VERSION-BUILD_VERSION+DIST)
+Description: Ghostty terminal VT core library (development files, nightly)
+ Weekly build of the libghostty-vt development files from the
+ upstream main branch. Contains public C headers, the unversioned
+ shared library symlink, the static library, and pkg-config files
+ required to build applications against libghostty-vt.
+ .
+ Install the stable `libghostty-vt-dev` package if you want a
+ release build.

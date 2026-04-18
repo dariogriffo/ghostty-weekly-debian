@@ -1,0 +1,18 @@
+Source: ghostty
+Section: libs
+Priority: optional
+Maintainer: Dario Griffo <dariogriffo@gmail.com>
+Homepage: https://ghostty.org/
+Package: libghostty-vt0-tip
+Version: GHOSTTY_VERSION-BUILD_VERSION+DIST
+Architecture: amd64
+Multi-Arch: same
+Depends: libc6
+Description: Ghostty terminal VT core library (shared runtime, nightly)
+ Weekly build of the libghostty-vt shared library from the upstream
+ main branch. Provides the terminal VT engine used by Ghostty, for
+ use by third-party applications. Tracks development code and may be
+ unstable.
+ .
+ Install the stable `libghostty-vt0` package if you want a release
+ build.
