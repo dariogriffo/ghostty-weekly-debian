@@ -26,8 +26,10 @@ if [ -z "$APP_VERSION" ]; then
 fi
 
 # SemVer string for -Dversion-string (upstream validates via std.SemanticVersion).
-#   APP=1.3.2-dev, BUILD_DATE=20260418  →  1.3.2-dev+20260418
-ZIG_VERSION_STRING="${APP_VERSION}+${BUILD_DATE}"
+# Build metadata is the upstream commit SHA so `ghostty --version` identifies the
+# exact source revision rather than the opaque packaging date.
+#   APP=1.3.2-dev, GHOSTTY_SHA=ca7516be  →  1.3.2-dev+ca7516be
+ZIG_VERSION_STRING="${APP_VERSION}+${GHOSTTY_SHA}"
 
 # Debian-compatible upstream version: must start with a digit; `-` is reserved for
 # the debian_revision separator. Translate SemVer "-dev" to Debian "~dev.<YYYYMMDD>"

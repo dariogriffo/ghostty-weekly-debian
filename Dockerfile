@@ -104,6 +104,17 @@ RUN set -eux; \
     sed -i "s|GHOSTTY_VERSION|$UPSTREAM_VERSION|g" /pkg/libghostty-vt0-tip/DEBIAN/shlibs
 
 # ---------------------------------------------------------------------------
+# Rewrite hard-coded `./zig-out` paths baked into desktop/service files by
+# upstream's `zig build`. Without this the .desktop Exec= points at
+# ./zig-out/usr/bin/ghostty and GNOME Shell silently drops the entry from
+# the applications menu (no icon visible).
+# ---------------------------------------------------------------------------
+RUN sed -i 's|\./zig-out||g' \
+        /pkg/ghostty-tip/usr/share/systemd/user/app-com.mitchellh.ghostty.service \
+        /pkg/ghostty-tip/usr/share/applications/com.mitchellh.ghostty.desktop \
+        /pkg/ghostty-tip/usr/share/dbus-1/services/com.mitchellh.ghostty.service
+
+# ---------------------------------------------------------------------------
 # Post-process ghostty resources (compress docs/man, move zsh completions)
 # ---------------------------------------------------------------------------
 RUN gzip -n -9 /pkg/ghostty-tip/usr/share/doc/ghostty-tip/changelog.Debian \
