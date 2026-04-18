@@ -5,6 +5,9 @@ ghostty-*.*.*/
 # .deb Packages
 *.deb
 
+# Version metadata written per build by build_ghostty_debian.sh
+ghostty-tip.version
+
 .idea/*
 .DS_Store
 

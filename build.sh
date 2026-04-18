@@ -1,3 +1,4 @@
-GHOSTTY_VERSION=$1
-BUILD_VERSION=$2
-./build_ghostty_debian.sh $1 $2
+#!/bin/bash
+# Thin wrapper so `./build.sh [BUILD_VERSION]` still works. The build script
+# auto-resolves the upstream tip SHA itself — no ghostty version is supplied.
+./build_ghostty_debian.sh "${1:-1}"
