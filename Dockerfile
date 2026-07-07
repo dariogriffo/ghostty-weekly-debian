@@ -40,6 +40,8 @@ RUN sed -i 's/linkSystemLibrary2("bzip2", dynamic_link_opts)/linkSystemLibrary2(
 RUN zig build --summary all --prefix ./zig-out/usr \
     -Doptimize=ReleaseFast -Dcpu=baseline -Dpie=true -Demit-docs \
     -Dversion-string="$ZIG_VERSION_STRING" \
+    -Dstrip=false \
+    -fsys=fontconfig \
     -Dlib-version-string=$LIBGHOSTTY_VT_VERSION
 
 # ---------------------------------------------------------------------------
