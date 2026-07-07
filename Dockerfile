@@ -20,7 +20,7 @@ ARG LIBGHOSTTY_VT_VERSION=0.1.0
 RUN apt update && apt install -y git curl gpg gnupg lsb-release build-essential \
         debhelper devscripts pandoc libonig-dev libbz2-dev libgtk-4-dev \
         libadwaita-1-dev libgtk4-layer-shell-dev blueprint-compiler minisign \
-        libxml2-utils
+        libxml2-utils libfontconfig-dev
 RUN curl -sS https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc \
         | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/debian.griffo.io.gpg \
     && echo "deb https://debian.griffo.io/apt $(lsb_release -sc) main" \
