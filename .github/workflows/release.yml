@@ -37,7 +37,7 @@ jobs:
             ghostty-tip.version
 
   release-ghostty:
-    name: (Draft-)Release Ghostty for Debian
+    name: Release Ghostty for Debian
     runs-on: ubuntu-latest
     needs: build-ghostty
     steps:
@@ -59,10 +59,10 @@ jobs:
             echo "UPSTREAM_VERSION=$UPSTREAM_VERSION"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Publish Release Draft
+      - name: Publish Release
         uses: softprops/action-gh-release@v2
         with:
-          draft: true
+          draft: false
           files: |
             ghostty-tip_*.deb
             libghostty-vt0-tip_*.deb
