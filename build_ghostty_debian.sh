@@ -62,7 +62,7 @@ declare -a pkgs=("ghostty-tip" "libghostty-vt0-tip" "libghostty-vt-dev-tip")
 for i in "${arr[@]}"
 do
   DEBIAN_DIST=$i
-  FULL_VERSION=${UPSTREAM_VERSION}-${BUILD_VERSION}+${DEBIAN_DIST}_amd64
+  FULL_VERSION=${UPSTREAM_VERSION}-${BUILD_VERSION}~${DEBIAN_DIST}_amd64
   docker build . -t ghostty-$DEBIAN_DIST \
     --build-arg GHOSTTY_SHA=$GHOSTTY_SHA \
     --build-arg UPSTREAM_VERSION=$UPSTREAM_VERSION \

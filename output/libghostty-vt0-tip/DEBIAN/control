@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Dario Griffo <dariogriffo@gmail.com>
 Homepage: https://ghostty.org/
 Package: libghostty-vt0-tip
-Version: GHOSTTY_VERSION-BUILD_VERSION+DIST
+Version: GHOSTTY_VERSION-BUILD_VERSION~DIST
 Architecture: amd64
 Multi-Arch: same
 Depends: libc6
