@@ -49,6 +49,8 @@ RUN zig build --summary all --prefix ./zig-out/usr \
 # ---------------------------------------------------------------------------
 RUN mkdir -p /pkg/ghostty-tip/DEBIAN /pkg/ghostty-tip/usr/share/doc/ghostty-tip/
 COPY output/ghostty-tip/DEBIAN/control /pkg/ghostty-tip/DEBIAN/
+COPY output/ghostty-tip/DEBIAN/postinst /pkg/ghostty-tip/DEBIAN/postinst
+RUN chmod 755 /pkg/ghostty-tip/DEBIAN/postinst
 COPY output/changelog.Debian /pkg/ghostty-tip/usr/share/doc/ghostty-tip/changelog.Debian
 COPY output/copyright /pkg/ghostty-tip/usr/share/doc/ghostty-tip/copyright
 RUN cp -R ./zig-out/usr /pkg/ghostty-tip/
