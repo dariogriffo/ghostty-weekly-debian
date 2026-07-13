@@ -30,6 +30,8 @@ install on Debian. If you're looking for the Ghostty source code, see
 
 ## Install/Update
 
+📖 **Step-by-step install guide:** [Debian](https://debian.griffo.io/install-latest-ghostty-in-debian.html)
+
 ### The Debian way
 
 ```sh
