@@ -26,7 +26,7 @@ RUN curl -sS https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc 
     && echo "deb https://deb.griffo.io/apt $(lsb_release -sc) main" \
         | tee /etc/apt/sources.list.d/deb.griffo.io.list \
     && apt-get update \
-    && apt-get install -y zig-oldstable
+    && apt-get install -y zig-stable
 
 RUN git config --global --add advice.detachedHead false
 RUN git clone https://github.com/ghostty-org/ghostty.git
