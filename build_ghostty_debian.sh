@@ -42,18 +42,26 @@ else
   UPSTREAM_VERSION="${APP_VERSION}~tip.${BUILD_DATE}"
 fi
 
+# Git tag / GitHub release name. Same shape as the Debian package version, with the
+# tilde swapped for a dot (tags cannot carry `~`) and the debian revision appended.
+#   UPSTREAM_VERSION=1.3.2~dev.20260727, BUILD_VERSION=1  →  1.3.2.dev.20260727-1
+RELEASE_VERSION="${UPSTREAM_VERSION//\~/.}-${BUILD_VERSION}"
+
 echo "Building ghostty tip @ ${GHOSTTY_SHA} (build date ${BUILD_DATE})"
 echo "  upstream app version : ${APP_VERSION}"
 echo "  zig  -Dversion-string: ${ZIG_VERSION_STRING}"
 echo "  debian upstream      : ${UPSTREAM_VERSION}"
+echo "  release / tag        : ${RELEASE_VERSION}"
 
 # Shell-sourceable record of everything resolved at build time. CI / release
 # tooling can `source ghostty-tip.version` to read these values.
 cat > ghostty-tip.version <<EOF
 GHOSTTY_SHA=${GHOSTTY_SHA}
 BUILD_DATE=${BUILD_DATE}
+BUILD_VERSION=${BUILD_VERSION}
 APP_VERSION=${APP_VERSION}
 UPSTREAM_VERSION=${UPSTREAM_VERSION}
+RELEASE_VERSION=${RELEASE_VERSION}
 ZIG_VERSION_STRING=${ZIG_VERSION_STRING}
 EOF
 

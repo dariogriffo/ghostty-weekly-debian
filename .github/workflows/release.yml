@@ -61,8 +61,10 @@ jobs:
           {
             echo "GHOSTTY_SHA=$GHOSTTY_SHA"
             echo "BUILD_DATE=$BUILD_DATE"
+            echo "BUILD_VERSION=$BUILD_VERSION"
             echo "APP_VERSION=$APP_VERSION"
             echo "UPSTREAM_VERSION=$UPSTREAM_VERSION"
+            echo "RELEASE_VERSION=$RELEASE_VERSION"
           } >> "$GITHUB_OUTPUT"
 
       - name: Publish Release
@@ -73,13 +75,13 @@ jobs:
             ghostty-tip_*.deb
             libghostty-vt0-tip_*.deb
             libghostty-vt-dev-tip_*.deb
-          name: "Ghostty ${{ steps.ver.outputs.APP_VERSION }} (tip ${{ steps.ver.outputs.BUILD_DATE }})"
-          tag_name: tip-${{ steps.ver.outputs.BUILD_DATE }}
+          name: ${{ steps.ver.outputs.RELEASE_VERSION }}
+          tag_name: ${{ steps.ver.outputs.RELEASE_VERSION }}
           body: |
             Weekly build of Ghostty from the upstream `tip` tag.
 
             - Upstream app version: `${{ steps.ver.outputs.APP_VERSION }}`
             - Upstream commit: [`${{ steps.ver.outputs.GHOSTTY_SHA }}`](https://github.com/ghostty-org/ghostty/commit/${{ steps.ver.outputs.GHOSTTY_SHA }})
             - Build date (UTC): `${{ steps.ver.outputs.BUILD_DATE }}`
-            - Debian package version: `${{ steps.ver.outputs.UPSTREAM_VERSION }}-1+<dist>`
+            - Debian package version: `${{ steps.ver.outputs.UPSTREAM_VERSION }}-${{ steps.ver.outputs.BUILD_VERSION }}~<dist>`
           fail_on_unmatched_files: true
