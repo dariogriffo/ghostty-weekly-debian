@@ -8,6 +8,7 @@ Version: GHOSTTY_VERSION-BUILD_VERSION~DIST
 Architecture: amd64
 Multi-Arch: same
 Depends: libghostty-vt0-tip (= GHOSTTY_VERSION-BUILD_VERSION~DIST)
+Conflicts: libghostty-vt-dev, ghostty (<< 1.4.0~)
 Description: Ghostty terminal VT core library (development files, nightly)
  Weekly build of the libghostty-vt development files from the
  upstream main branch. Contains public C headers, the unversioned

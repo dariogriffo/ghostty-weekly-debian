@@ -30,6 +30,9 @@ jobs:
         run: ./validate_license.sh
 
       - name: Build Ghostty
+        env:
+          DEB_GRIFFO_LOGIN: ${{ secrets.DEB_GRIFFO_LOGIN }}
+          DEB_GRIFFO_PASSWORD: ${{ secrets.DEB_GRIFFO_PASSWORD }}
         run: ./build_ghostty_debian.sh "${{ inputs.build_version || '1' }}"
 
       - name: Upload Artifact

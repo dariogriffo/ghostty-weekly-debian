@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 ARG DEBIAN_DIST=bookworm
 FROM debian:$DEBIAN_DIST
 
@@ -21,7 +22,11 @@ RUN apt update && apt install -y git curl gpg gnupg lsb-release build-essential 
         debhelper devscripts pandoc libonig-dev libbz2-dev libgtk-4-dev \
         libadwaita-1-dev libgtk4-layer-shell-dev blueprint-compiler minisign \
         libxml2-utils libfontconfig-dev
-RUN curl -sS https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc \
+# Install zig from griffo.io repo. The repo requires credentials; they arrive as a
+# BuildKit secret mounted only for this RUN, so they never land in a layer,
+# the image history or a build arg.
+RUN --mount=type=secret,id=apt_auth,target=/etc/apt/auth.conf.d/deb.griffo.io.conf,mode=0600,required=true \
+    curl -sS https://deb.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc \
         | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/deb.griffo.io.gpg \
     && echo "deb https://deb.griffo.io/apt $(lsb_release -sc) main" \
         | tee /etc/apt/sources.list.d/deb.griffo.io.list \
@@ -117,6 +122,10 @@ RUN sed -i 's|\./zig-out||g' \
         /pkg/ghostty-tip/usr/share/systemd/user/app-com.mitchellh.ghostty.service \
         /pkg/ghostty-tip/usr/share/applications/com.mitchellh.ghostty.desktop \
         /pkg/ghostty-tip/usr/share/dbus-1/services/com.mitchellh.ghostty.service
+
+# The .pc files carry the build-time `--prefix ./zig-out/usr`; point them at
+# the installed location so pkg-config users get /usr/include and /usr/lib.
+RUN sed -i 's|^prefix=.*|prefix=/usr|' /pkg/libghostty-vt-dev-tip/usr/lib/pkgconfig/*.pc
 
 # ---------------------------------------------------------------------------
 # Post-process ghostty resources (compress docs/man, move zsh completions)

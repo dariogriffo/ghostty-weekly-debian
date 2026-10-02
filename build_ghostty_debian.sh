@@ -3,6 +3,15 @@ set -euo pipefail
 
 BUILD_VERSION="${1:-1}"
 
+# deb.griffo.io needs credentials. Build the apt auth file in memory (printf is
+# a builtin, so they never show up in a process list) and hand it to docker as
+# a BuildKit secret.
+: "${DEB_GRIFFO_LOGIN:?set DEB_GRIFFO_LOGIN to your deb.griffo.io login}"
+: "${DEB_GRIFFO_PASSWORD:?set DEB_GRIFFO_PASSWORD to your deb.griffo.io password}"
+APT_AUTH=$(printf 'machine deb.griffo.io\nlogin %s\npassword %s\n' \
+  "$DEB_GRIFFO_LOGIN" "$DEB_GRIFFO_PASSWORD")
+export APT_AUTH
+
 # Resolve the latest commit SHA of the upstream `tip` rolling tag.
 GHOSTTY_SHA=$(curl -sSf "https://api.github.com/repos/ghostty-org/ghostty/commits/tip" \
   | grep -oP '"sha": "\K[^"]+' | head -n 1 | cut -c 1-8)
@@ -72,6 +81,7 @@ do
   DEBIAN_DIST=$i
   FULL_VERSION=${UPSTREAM_VERSION}-${BUILD_VERSION}~${DEBIAN_DIST}_amd64
   docker build . -t ghostty-$DEBIAN_DIST \
+    --secret id=apt_auth,env=APT_AUTH \
     --build-arg GHOSTTY_SHA=$GHOSTTY_SHA \
     --build-arg UPSTREAM_VERSION=$UPSTREAM_VERSION \
     --build-arg ZIG_VERSION_STRING=$ZIG_VERSION_STRING \

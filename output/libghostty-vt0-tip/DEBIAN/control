@@ -8,6 +8,7 @@ Version: GHOSTTY_VERSION-BUILD_VERSION~DIST
 Architecture: amd64
 Multi-Arch: same
 Depends: libc6
+Conflicts: libghostty-vt0, ghostty (<< 1.4.0~)
 Description: Ghostty terminal VT core library (shared runtime, nightly)
  Weekly build of the libghostty-vt shared library from the upstream
  main branch. Provides the terminal VT engine used by Ghostty, for
