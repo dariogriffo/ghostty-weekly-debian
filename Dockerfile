@@ -31,7 +31,7 @@ RUN --mount=type=secret,id=apt_auth,target=/etc/apt/auth.conf.d/deb.griffo.io.co
     && echo "deb https://deb.griffo.io/apt $(lsb_release -sc) main" \
         | tee /etc/apt/sources.list.d/deb.griffo.io.list \
     && apt-get update \
-    && apt-get install -y zig-stable
+    && apt-get install -y zig-oldstable
 
 RUN git config --global --add advice.detachedHead false
 RUN git clone https://github.com/ghostty-org/ghostty.git
