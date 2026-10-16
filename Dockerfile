@@ -22,6 +22,16 @@ RUN apt update && apt install -y git curl gpg gnupg lsb-release build-essential 
         debhelper devscripts pandoc libonig-dev libbz2-dev libgtk-4-dev \
         libadwaita-1-dev libgtk4-layer-shell-dev blueprint-compiler minisign \
         libxml2-utils libfontconfig-dev
+# Ghostty main needs blueprint-compiler >= 0.20.0; trixie only ships 0.16.0
+# (forky/sid have a new enough one). Swap in the upstream release on trixie.
+RUN if [ "$DEBIAN_DIST" = "trixie" ]; then \
+      apt-get purge -y blueprint-compiler \
+      && apt-get install -y meson ninja-build python3-gi \
+      && git clone --depth 1 --branch v0.22.2 https://gitlab.gnome.org/GNOME/blueprint-compiler.git /tmp/blueprint-compiler \
+      && meson setup /tmp/blueprint-compiler/build /tmp/blueprint-compiler --prefix=/usr \
+      && meson install -C /tmp/blueprint-compiler/build \
+      && rm -rf /tmp/blueprint-compiler; \
+    fi
 # Install zig from griffo.io repo. The repo requires credentials; they arrive as a
 # BuildKit secret mounted only for this RUN, so they never land in a layer,
 # the image history or a build arg.
