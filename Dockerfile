@@ -59,6 +59,15 @@ RUN zig build --summary all --prefix ./zig-out/usr \
     -fsys=fontconfig \
     -Dlib-version-string=$LIBGHOSTTY_VT_VERSION
 
+# Since upstream 184b01ab (2026-11-04) an app build no longer installs
+# libghostty-vt; only a library build (-Demit-lib-vt) does, and that mode skips
+# the app. Build it separately into its own prefix so the two never mix.
+RUN zig build --summary all --prefix ./zig-out-vt/usr \
+    -Demit-lib-vt \
+    -Doptimize=ReleaseFast -Dcpu=baseline \
+    -Dstrip=false \
+    -Dlib-version-string=$LIBGHOSTTY_VT_VERSION
+
 # ---------------------------------------------------------------------------
 # Stage package: ghostty-tip (binary + resources; excludes libghostty-vt artifacts)
 # ---------------------------------------------------------------------------
@@ -69,14 +78,8 @@ RUN chmod 755 /pkg/ghostty-tip/DEBIAN/postinst
 COPY output/changelog.Debian /pkg/ghostty-tip/usr/share/doc/ghostty-tip/changelog.Debian
 COPY output/copyright /pkg/ghostty-tip/usr/share/doc/ghostty-tip/copyright
 RUN cp -R ./zig-out/usr /pkg/ghostty-tip/
-RUN rm -f /pkg/ghostty-tip/usr/lib/libghostty-vt.so* \
-          /pkg/ghostty-tip/usr/lib/libghostty-vt.a && \
-    rm -rf /pkg/ghostty-tip/usr/include/ghostty && \
-    rm -f /pkg/ghostty-tip/usr/share/pkgconfig/libghostty-vt*.pc && \
-    rmdir --ignore-fail-on-non-empty \
-          /pkg/ghostty-tip/usr/lib \
-          /pkg/ghostty-tip/usr/include \
-          /pkg/ghostty-tip/usr/share/pkgconfig 2>/dev/null || true
+# The app build must not carry libghostty-vt (that lives in its own packages).
+RUN ! ls /pkg/ghostty-tip/usr/lib/libghostty-vt* /pkg/ghostty-tip/usr/include/ghostty 2>/dev/null
 
 # ---------------------------------------------------------------------------
 # Stage package: libghostty-vt0-tip (versioned shared library only)
@@ -89,7 +92,7 @@ COPY output/libghostty-vt0-tip/DEBIAN/triggers /pkg/libghostty-vt0-tip/DEBIAN/
 COPY output/libghostty-vt0-tip/DEBIAN/shlibs   /pkg/libghostty-vt0-tip/DEBIAN/
 COPY output/changelog.Debian /pkg/libghostty-vt0-tip/usr/share/doc/libghostty-vt0-tip/changelog.Debian
 COPY output/copyright        /pkg/libghostty-vt0-tip/usr/share/doc/libghostty-vt0-tip/copyright
-RUN cp -a ./zig-out/usr/lib/libghostty-vt.so.* /pkg/libghostty-vt0-tip/usr/lib/
+RUN cp -a ./zig-out-vt/usr/lib/libghostty-vt.so.* /pkg/libghostty-vt0-tip/usr/lib/
 
 # ---------------------------------------------------------------------------
 # Stage package: libghostty-vt-dev-tip (headers, static lib, .so symlink, .pc)
@@ -101,11 +104,11 @@ RUN mkdir -p /pkg/libghostty-vt-dev-tip/DEBIAN \
 COPY output/libghostty-vt-dev-tip/DEBIAN/control /pkg/libghostty-vt-dev-tip/DEBIAN/
 COPY output/changelog.Debian /pkg/libghostty-vt-dev-tip/usr/share/doc/libghostty-vt-dev-tip/changelog.Debian
 COPY output/copyright        /pkg/libghostty-vt-dev-tip/usr/share/doc/libghostty-vt-dev-tip/copyright
-RUN cp -a ./zig-out/usr/lib/libghostty-vt.so /pkg/libghostty-vt-dev-tip/usr/lib/ && \
-    cp -a ./zig-out/usr/lib/libghostty-vt.a  /pkg/libghostty-vt-dev-tip/usr/lib/ && \
-    cp -a ./zig-out/usr/include/ghostty/.    /pkg/libghostty-vt-dev-tip/usr/include/ghostty/ && \
-    cp -a ./zig-out/usr/share/pkgconfig/libghostty-vt.pc \
-          ./zig-out/usr/share/pkgconfig/libghostty-vt-static.pc \
+RUN cp -a ./zig-out-vt/usr/lib/libghostty-vt.so /pkg/libghostty-vt-dev-tip/usr/lib/ && \
+    cp -a ./zig-out-vt/usr/lib/libghostty-vt.a  /pkg/libghostty-vt-dev-tip/usr/lib/ && \
+    cp -a ./zig-out-vt/usr/include/ghostty/.    /pkg/libghostty-vt-dev-tip/usr/include/ghostty/ && \
+    cp -a ./zig-out-vt/usr/share/pkgconfig/libghostty-vt.pc \
+          ./zig-out-vt/usr/share/pkgconfig/libghostty-vt-static.pc \
           /pkg/libghostty-vt-dev-tip/usr/lib/pkgconfig/
 
 # ---------------------------------------------------------------------------
