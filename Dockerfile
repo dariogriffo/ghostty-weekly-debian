@@ -109,7 +109,9 @@ RUN cp -a ./zig-out-vt/usr/lib/libghostty-vt.so /pkg/libghostty-vt-dev-tip/usr/l
     cp -a ./zig-out-vt/usr/include/ghostty/.    /pkg/libghostty-vt-dev-tip/usr/include/ghostty/ && \
     cp -a ./zig-out-vt/usr/lib/pkgconfig/libghostty-vt.pc \
           ./zig-out-vt/usr/lib/pkgconfig/libghostty-vt-static.pc \
-          /pkg/libghostty-vt-dev-tip/usr/lib/pkgconfig/
+          /pkg/libghostty-vt-dev-tip/usr/lib/pkgconfig/ && \
+    mkdir -p /pkg/libghostty-vt-dev-tip/usr/lib/cmake && \
+    cp -a ./zig-out-vt/usr/lib/cmake/ghostty-vt /pkg/libghostty-vt-dev-tip/usr/lib/cmake/
 
 # ---------------------------------------------------------------------------
 # Substitute version placeholders in control/changelog/shlibs for all packages
@@ -154,7 +156,7 @@ RUN [ "$DEBIAN_DIST" != "bookworm" ] && rm -fRd /pkg/ghostty-tip/usr/share/termi
 # ---------------------------------------------------------------------------
 # Build the three .deb files
 # ---------------------------------------------------------------------------
-RUN ls -la /pkg/ghostty-tip/usr /pkg/libghostty-vt0-tip/usr/lib /pkg/libghostty-vt-dev-tip/usr/lib /pkg/libghostty-vt-dev-tip/usr/include/ghostty
+RUN ls -la /pkg/ghostty-tip/usr /pkg/libghostty-vt0-tip/usr/lib /pkg/libghostty-vt-dev-tip/usr/lib /pkg/libghostty-vt-dev-tip/usr/lib/cmake/ghostty-vt /pkg/libghostty-vt-dev-tip/usr/include/ghostty
 RUN dpkg-deb --build /pkg/ghostty-tip          /ghostty-tip_${FULL_VERSION}.deb
 RUN dpkg-deb --build /pkg/libghostty-vt0-tip   /libghostty-vt0-tip_${FULL_VERSION}.deb
 RUN dpkg-deb --build /pkg/libghostty-vt-dev-tip /libghostty-vt-dev-tip_${FULL_VERSION}.deb
