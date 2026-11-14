@@ -107,8 +107,8 @@ COPY output/copyright        /pkg/libghostty-vt-dev-tip/usr/share/doc/libghostty
 RUN cp -a ./zig-out-vt/usr/lib/libghostty-vt.so /pkg/libghostty-vt-dev-tip/usr/lib/ && \
     cp -a ./zig-out-vt/usr/lib/libghostty-vt.a  /pkg/libghostty-vt-dev-tip/usr/lib/ && \
     cp -a ./zig-out-vt/usr/include/ghostty/.    /pkg/libghostty-vt-dev-tip/usr/include/ghostty/ && \
-    cp -a ./zig-out-vt/usr/share/pkgconfig/libghostty-vt.pc \
-          ./zig-out-vt/usr/share/pkgconfig/libghostty-vt-static.pc \
+    cp -a ./zig-out-vt/usr/lib/pkgconfig/libghostty-vt.pc \
+          ./zig-out-vt/usr/lib/pkgconfig/libghostty-vt-static.pc \
           /pkg/libghostty-vt-dev-tip/usr/lib/pkgconfig/
 
 # ---------------------------------------------------------------------------
